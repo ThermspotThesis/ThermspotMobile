@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+  //temp limit received from parent
+  final double alarmThreshold;
+  final ValueChanged<double> onThresholdChanged;
+
+  const SettingsScreen({super.key,
+  required this.alarmThreshold,
+    required this.onThresholdChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +41,24 @@ class SettingsScreen extends StatelessWidget {
                   trailing: const Text('Celsius °C'),
                 ),
                 const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.warning_amber),
-                  title: const Text('Alarm threshold'),
-                  trailing: const Text('85 °C'),
+
+                Column(
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.warning_amber),
+                      title: const Text('Alarm threshold.'),
+                      trailing: Text(
+                        '${alarmThreshold.toStringAsFixed(0)} °C',
+                      ),
+                    ),
+                    Slider(
+                      value: alarmThreshold,
+                      min: 50,
+                      max: 110,
+                      divisions: 60,
+                      onChanged: onThresholdChanged,
+                    ),
+                  ],
                 ),
                 const Divider(height: 1),
                 ListTile(

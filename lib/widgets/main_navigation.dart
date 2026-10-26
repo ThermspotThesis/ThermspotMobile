@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/main_navigation.dart';
 
 import '../screens/monitor/monitor_screen.dart';
-//import '../screens/ai/ai_screen.dart';
+import '../screens/ai/ai_screen.dart';
 import '../screens/settings/settings_screen.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -15,14 +15,24 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   int selectedIndex = 0;
+  //shared threshold, stored in parent widget
+  double alarmThreshold = 85.0;
+
+  //update state to newValue, so engineers can use the slider for change
+  void updateAlarmThreshold(double newValue) {
+    setState(() {
+      alarmThreshold = newValue;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final screens = [
-      const MonitorScreen(),
+      MonitorScreen(alarmThreshold: alarmThreshold,), //
       const HeatmapPlaceholder(),
-      //const AiScreen(),
-      const SettingsScreen(),
+      const AiScreen(),
+      SettingsScreen(alarmThreshold: alarmThreshold,
+        onThresholdChanged: updateAlarmThreshold,), //
     ];
 
     return Scaffold(
@@ -71,3 +81,4 @@ class HeatmapPlaceholder extends StatelessWidget {
     );
   }
 }
+

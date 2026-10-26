@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import '../../services/mock_thermal_service.dart';
 
 class MonitorScreen extends StatefulWidget {
-  const MonitorScreen({super.key});
+  final double alarmThreshold;
+
+  const MonitorScreen({super.key,
+  required this.alarmThreshold});
 
   @override
   State<MonitorScreen> createState() => _MonitorScreenState();
@@ -20,8 +23,6 @@ class _MonitorScreenState extends State<MonitorScreen> {
   ThermalMeasurement? _currentMeasurement;
 
   final List<double> _history = [];
-
-  static const double alarmThreshold = 85.0;
 
   @override
   void initState() {
@@ -149,7 +150,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
                     child: CustomPaint(
                       painter: ThermalGraphPainter(
                         values: List.of(_history),
-                        threshold: alarmThreshold,
+                        threshold: widget.alarmThreshold,
                       ),
                     ),
                   ),
@@ -161,7 +162,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
           const SizedBox(height: 16),
 
           // Dynamic threshold warning
-          if (measurement.maximum > alarmThreshold)
+          if (measurement.maximum > widget.alarmThreshold)
             Card(
               color: const Color(0xFFFFEEEE),
               child: Padding(
